@@ -15,6 +15,8 @@ start_domain = None
 
 def get_html_from_url(url):
     r = requests.get(url)
+    if not r.headers['content-type'].startswith('text/html'):
+        return None
     return r.text
 
 
@@ -29,6 +31,8 @@ def crawl_url(url):
     print('crawling {}'.format(url))
     time.sleep(random.uniform(1.0, 3.0))
     html = get_html_from_url(url)
+    if not html:
+        return
     crawled.append(url)
     links = get_links_from_html(html)
     fully_qualified_links = [urljoin(url, link) for link in links]
